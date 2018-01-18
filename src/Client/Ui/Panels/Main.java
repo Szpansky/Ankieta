@@ -1,18 +1,19 @@
-package Client.Ui.Fragments;
+package Client.Ui.Panels;
 
-
-import Client.MainClient;
+import Client.config.Client;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Main extends JPanel {
+
+public class Main extends BasePanel {
     JButton startQuestionnaire = new JButton("Nowa ankieta");
     JButton showAllStats = new JButton("Pokaż wszystkie statystyki");
-    Questionnaire frame;
 
-    public Main() {
+
+    public Main(Client client) {
+        super(client);
         setVisible(true);
         setLayout(new FlowLayout());
         add(startQuestionnaire);
@@ -21,18 +22,20 @@ public class Main extends JPanel {
         onShowAllStatsClick();
     }
 
-    private void onStartClick(){
+
+    private void onStartClick() {
         startQuestionnaire.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.super.removeAll();
-                Main.super.add(new Questionnaire("Ankieta"));
+                Main.super.add(new Questionnaire(client));
                 Main.super.updateUI();
             }
         });
     }
 
-    private void onShowAllStatsClick(){
+
+    private void onShowAllStatsClick() {
         showAllStats.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -40,6 +43,4 @@ public class Main extends JPanel {
             }
         });
     }
-
-
 }

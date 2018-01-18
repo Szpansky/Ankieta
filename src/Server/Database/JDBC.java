@@ -4,6 +4,7 @@ package Server.Database;
 import Data.Answers;
 import Data.Question;
 import Data.Questions;
+import Data.Statistics;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -172,6 +173,11 @@ public class JDBC {
             System.out.println("Bląd odczytu z bazy! " + e.getMessage() + ": " + e.getErrorCode());
         }
         return questions;
+    }
+
+    public static Statistics getStatistics(){
+
+        return new Statistics();
     }
 
     public static void sendAnswers(Answers answers) {

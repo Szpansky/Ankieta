@@ -5,7 +5,6 @@ import Data.Question;
 
 import javax.swing.*;
 
-
 public class QuestionComponent extends JPanel {
 
     JTextArea questionTextArea = new JTextArea();
@@ -37,21 +36,16 @@ public class QuestionComponent extends JPanel {
         answerBCheckBox.setText(questionSplit[2]);
         answerCCheckBox.setText(questionSplit[3]);
         answerDCheckBox.setText(questionSplit[4]);
-
-
-
     }
 
-    public Answer getAnswer(){
+    public Answer getAnswer() {
         String answer = "";
 
-        if(answerACheckBox.isSelected()) answer = answer +'a';
-        if(answerBCheckBox.isSelected()) answer = answer +'b';
-        if(answerCCheckBox.isSelected()) answer = answer +'c';
-        if(answerDCheckBox.isSelected()) answer = answer +'d';
+        if (answerACheckBox.isSelected()) answer = answer + 'a';
+        if (answerBCheckBox.isSelected()) answer = answer + 'b';
+        if (answerCCheckBox.isSelected()) answer = answer + 'c';
+        if (answerDCheckBox.isSelected()) answer = answer + 'd';
 
-        return new Answer(question.id,answer);
+        return new Answer(question.id, answer);
     }
-
-
 }
