@@ -6,18 +6,22 @@ public class Statistic implements Serializable {
 
     public String id;
     public String text;
-    public String percentOfA;
-    public String percentOfB;
-    public String percentOfC;
-    public String percentOfD;
+    public Integer countOfA;
+    public Integer countOfB;
+    public Integer countOfC;
+    public Integer countOfD;
+    public Integer countOfEmpty;
+    public Integer countOfAll;
 
-    public Statistic(String id, String text, String percentOfA, String percentOfB, String percentOfC, String percentOfD ) {
+    public Statistic(String id, String text, Integer countOfA, Integer countOfB, Integer countOfC, Integer countOfD, Integer countOfEmpty, Integer countOfAll ) {
         this.id = id;
         this.text = text;
-        this.percentOfA = percentOfA;
-        this.percentOfB = percentOfB;
-        this.percentOfC = percentOfC;
-        this.percentOfD = percentOfD;
+        this.countOfA = countOfA;
+        this.countOfB = countOfB;
+        this.countOfC = countOfC;
+        this.countOfD = countOfD;
+        this.countOfEmpty = countOfEmpty;
+        this.countOfAll = countOfAll;
     }
 
 

@@ -11,13 +11,9 @@ public class Client {
     Statistics statistics;
     Socket mySocket;
 
-    public void Connect() {
+    public void Connect() throws IOException {
         int port = 3399;
-        try {
-            mySocket = new Socket("127.0.0.1", port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mySocket = new Socket("127.0.0.1", port);
     }
 
 

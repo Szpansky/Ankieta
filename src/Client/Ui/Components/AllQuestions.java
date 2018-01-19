@@ -1,4 +1,4 @@
-package Client.Ui.SimpleComponents;
+package Client.Ui.Components;
 
 import Data.Answers;
 import Data.Question;
@@ -7,11 +7,13 @@ import Data.Questions;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class QuestionsPanel extends JPanel {
-    ArrayList<QuestionComponent> questionComponents = new ArrayList<>();
+public class AllQuestions extends JPanel {
+    ArrayList<QuestionComponent> questionComponents;
 
 
-    public QuestionsPanel(Questions questions) {
+    public AllQuestions(Questions questions) {
+        questionComponents = new ArrayList<>();
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         for (Question question :

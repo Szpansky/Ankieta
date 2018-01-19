@@ -46,7 +46,15 @@ public class ServerTCPThread extends Thread {
     }
 
 
-    private boolean sendStatistics(Socket mySocket, Statistics statistics) {
+    private boolean sendStatistics(Socket mySocket) {
+        try {
+            Statistics statistics = JDBC.getStatistics();
+            ObjectOutputStream out = new ObjectOutputStream(mySocket.getOutputStream());
+            out.writeObject(statistics);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
@@ -71,9 +79,11 @@ public class ServerTCPThread extends Thread {
                 }
 
                 if (object instanceof Statistics) {
-                    statistics = (Statistics) object;
-                    statistics = JDBC.getStatistics();
-                    sendStatistics(mySocket, statistics);
+                    if (sendStatistics(mySocket)) {
+                        System.out.println("SEND (" + mySocket.getPort() + ") OK");
+                    } else {
+                        System.out.println("SEND (" + mySocket.getPort() + ") FALSE");
+                    }
                     break;
                 }
 

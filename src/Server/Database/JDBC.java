@@ -1,11 +1,9 @@
 package Server.Database;
 
 
-import Data.Answers;
-import Data.Question;
-import Data.Questions;
-import Data.Statistics;
+import Data.*;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -147,25 +145,18 @@ public class JDBC {
 
     public static Questions getQuestions() {
         System.out.println("DOWNLOADING QUESTIONS FROM DB");
-
         Question question = null;
-
         Questions questions = new Questions();
-
         String sql = "Select * from questions order by rand() limit 10";
-
         ResultSet r = executeQuery(st, sql);
         try {
-
             if (r != null) {
                 while (r.next()) {
                     Object id = r.getObject(1);
                     Object text = r.getObject(2);
                     if (id != null && text != null) {
-
                         question = new Question(id.toString(), text.toString());
                         questions.add(question);
-
                     }
                 }
             }
@@ -175,10 +166,55 @@ public class JDBC {
         return questions;
     }
 
-    public static Statistics getStatistics(){
 
-        return new Statistics();
+    public static Statistics getStatistics() {
+        System.out.println("DOWNLOADING STATISTICS FROM DB");
+        Statistic statistic = null;
+        Statistics statistics = new Statistics();
+        String sql = "SELECT question_id , " +
+                "text, " +
+                "SUM(case WHEN answer like('%a%') then 1 else 0 end) as CountOfA, " +
+                "SUM(case WHEN answer like('%b%') then 1 else 0 end) as CountOfB, " +
+                "SUM(case WHEN answer like('%c%') then 1 else 0 end) as CountOfC, " +
+                "SUM(case WHEN answer like('%d%') then 1 else 0 end) as CountOfD, " +
+                "SUM(case WHEN answer ='' then 1 else 0 end) as CountOfEmpty," +
+                "sum(case when answer like('%%') then 1 else 0 end) as CountOfAll " +
+                "FROM `questions_answers_count` " +
+                "left JOIN questions on questions_answers_count.question_id = questions.id group by question_id";
+        ResultSet r = executeQuery(st, sql);
+        try {
+            if (r != null) {
+                while (r.next()) {
+                    Object id = r.getObject(1);
+                    Object text = r.getObject(2);
+                    Object countOfA = r.getObject(3);
+                    Object countOfB = r.getObject(4);
+                    Object countOfC = r.getObject(5);
+                    Object countOfD = r.getObject(6);
+                    Object countOfEmpty = r.getObject(7);
+                    Object countOfAll = r.getObject(8);
+
+                    if (id != null && countOfA != null) {
+                        statistic = new Statistic(
+                                id.toString(),
+                                text.toString(),
+                                Integer.parseInt(countOfA.toString()),
+                                Integer.parseInt(countOfB.toString()),
+                                Integer.parseInt(countOfC.toString()),
+                                Integer.parseInt(countOfD.toString()),
+                                Integer.parseInt(countOfEmpty.toString()),
+                                Integer.parseInt(countOfAll.toString()));
+                        statistics.add(statistic);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Bląd odczytu z bazy! " + e.getMessage() + ": " + e.getErrorCode());
+        }
+
+        return statistics;
     }
+
 
     public static void sendAnswers(Answers answers) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -189,9 +225,8 @@ public class JDBC {
         String sql;
         sql = "INSERT INTO `questions_answers_count` (`id`, `question_id`, `answer`, `date`) VALUES";
 
-        //-1 bo ostatni element odpowiada za "exit"
-        for (int i = 0; i < answers.size() - 1; i++) {
-            sql = sql + " (NULL,'" + answers.get(i).id + "' ,'" + answers.get(i).answer + "','" + date + "' ), ";
+        for (Answer answer : answers) {
+            sql = sql.concat(" (NULL,'" + answer.id + "' ,'" + answer.answer + "','" + date + "' ), ");
         }
         sql = sql.substring(0, sql.length() - 2);
         executeUpdate(st, sql);
